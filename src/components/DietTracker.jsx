@@ -1,15 +1,13 @@
-import React from 'react';
-import { VEGETARIAN_MEALS, DIET_TARGETS } from '../utils/presets';
+import React, { useState } from 'react';
 import { 
   Droplet, 
-  Flame, 
-  Egg, 
-  Beef, 
-  Apple, 
-  Check, 
+  Target,
   Plus, 
-  Minus, 
-  UtensilsCrossed 
+  Minus,
+  Pill,
+  Flame,
+  Activity,
+  Edit2
 } from 'lucide-react';
 
 export default function DietTracker({ 
@@ -17,92 +15,108 @@ export default function DietTracker({
   dietLogs, 
   saveDietLog 
 }) {
-  // Fetch current log for this date, or set default
   const dateStr = todayDate;
+  
+  // Base default state
   const currentLog = dietLogs[dateStr] || {
-    meals: {
-      breakfast: false,
-      mid_morning: false,
-      lunch: false,
-      pre_workout: false,
-      post_workout: false,
-      snack: false,
-      dinner: false,
-      before_bed: false
-    },
-    water: 0
+    calories: 0,
+    target: 2000,
+    water: 0,
+    supplements: {
+      protein: false,
+      creatine: false,
+      d3k2: false,
+      b12: false
+    }
   };
 
-  // Toggle meal checkbox
-  const handleMealToggle = (mealId) => {
-    const updatedMeals = {
-      ...currentLog.meals,
-      [mealId]: !currentLog.meals[mealId]
-    };
-    saveDietLog(dateStr, {
-      ...currentLog,
-      meals: updatedMeals
-    });
+  const [inputCalories, setInputCalories] = useState('');
+  const [isEditingTarget, setIsEditingTarget] = useState(false);
+  const [targetInput, setTargetInput] = useState(currentLog.target || 2000);
+
+  // Update calorie target
+  const handleSaveTarget = () => {
+    const val = parseInt(targetInput) || 2000;
+    saveDietLog(dateStr, { ...currentLog, target: val });
+    setIsEditingTarget(false);
+  };
+
+  // Add calories
+  const handleAddCalories = (e) => {
+    e.preventDefault();
+    const val = parseInt(inputCalories);
+    if (!val || val <= 0) return;
+    saveDietLog(dateStr, { ...currentLog, calories: (currentLog.calories || 0) + val });
+    setInputCalories('');
   };
 
   // Water increment / decrement
   const updateWater = (amount) => {
-    const newWater = Math.max(0, currentLog.water + amount);
+    const newWater = Math.max(0, (currentLog.water || 0) + amount);
+    saveDietLog(dateStr, { ...currentLog, water: newWater });
+  };
+
+  // Toggle supplement
+  const handleSuppToggle = (suppId) => {
+    const currentSupps = currentLog.supplements || { protein: false, creatine: false, d3k2: false, b12: false };
     saveDietLog(dateStr, {
       ...currentLog,
-      water: newWater
+      supplements: {
+        ...currentSupps,
+        [suppId]: !currentSupps[suppId]
+      }
     });
   };
 
-  // Calculate current macros based on checked meals
-  const totals = VEGETARIAN_MEALS.reduce((acc, meal) => {
-    if (currentLog.meals[meal.id]) {
-      acc.protein += meal.protein;
-      acc.carbs += meal.carbs;
-      acc.fat += meal.fat;
-      acc.calories += meal.calories;
-    }
-    return acc;
-  }, { protein: 0, carbs: 0, fat: 0, calories: 0 });
-
-  // Get percentage of targets
-  const getPercent = (value, target) => Math.min(100, Math.round((value / target) * 100));
-
-  const proteinPct = getPercent(totals.protein, DIET_TARGETS.protein);
-  const carbsPct = getPercent(totals.carbs, DIET_TARGETS.carbs);
-  const fatPct = getPercent(totals.fat, DIET_TARGETS.fat);
-  const caloriesPct = getPercent(totals.calories, DIET_TARGETS.calories);
-  const waterPct = getPercent(currentLog.water, 3500); // 3.5L target
+  const calories = currentLog.calories || 0;
+  const target = currentLog.target || 2000;
+  const caloriesPct = Math.min(100, Math.round((calories / target) * 100));
+  const waterPct = Math.min(100, Math.round(((currentLog.water || 0) / 3500) * 100));
+  const currentSupps = currentLog.supplements || {};
 
   return (
     <div className="space-y-6 pb-20">
       {/* Header */}
       <div>
         <span className="text-neon font-mono text-sm tracking-wider uppercase">Diet Protocol</span>
-        <h1 className="text-2xl font-bold text-dark-textLight mt-1">Vegetarian Nutrition</h1>
+        <h1 className="text-2xl font-bold text-dark-textLight mt-1">Calorie & Supplements</h1>
         <p className="text-xs text-dark-textMuted mt-1">
-          High-protein vegetarian menu designed to drop body fat. Hit 145g protein and stay within 2050 kcal.
+          Set your daily targets, track your calorie intake, and log your essential supplements.
         </p>
       </div>
 
-      {/* Calories & Macros Cards */}
+      {/* Calorie Tracker Card */}
       <div className="bg-dark-card border border-dark-border rounded-3xl p-5 space-y-4">
-        {/* Calorie Goal Summary */}
-        <div className="flex justify-between items-end">
+        <div className="flex justify-between items-start">
           <div>
             <span className="text-[10px] text-dark-textMuted font-mono uppercase tracking-wider block">Calorie Intake</span>
-            <div className="text-3xl font-extrabold text-dark-textLight font-mono">
-              {totals.calories} <span className="text-sm font-normal text-dark-textMuted">/ {DIET_TARGETS.calories} kcal</span>
+            <div className="text-3xl font-extrabold text-dark-textLight font-mono mt-1">
+              {calories} <span className="text-sm font-normal text-dark-textMuted">/ {target} kcal</span>
             </div>
           </div>
-          <div className="text-right">
-            <span className="text-neon font-mono font-bold text-sm bg-neon/10 border border-neon/20 px-2 py-0.5 rounded-lg">
-              {caloriesPct}% Target
-            </span>
+          <div>
+            {isEditingTarget ? (
+              <div className="flex items-center gap-2">
+                <input 
+                  type="number"
+                  value={targetInput}
+                  onChange={(e) => setTargetInput(e.target.value)}
+                  className="w-20 bg-dark-bg border border-dark-border rounded px-2 py-1 text-xs text-dark-textLight outline-none focus:border-neon"
+                />
+                <button onClick={handleSaveTarget} className="text-xs text-neon font-bold">Save</button>
+              </div>
+            ) : (
+              <button 
+                onClick={() => setIsEditingTarget(true)} 
+                className="text-[10px] flex items-center gap-1 text-dark-textMuted hover:text-neon transition-colors"
+              >
+                <Edit2 size={12} /> Edit Target
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Calorie Progress Bar */}
+        {/* Progress Bar */}
         <div className="w-full bg-dark-bg h-3 rounded-full overflow-hidden border border-dark-border">
           <div 
             className="bg-neon h-full transition-all duration-500 ease-out" 
@@ -110,76 +124,65 @@ export default function DietTracker({
           ></div>
         </div>
 
-        {/* Detailed Macros Progress Grid */}
-        <div className="grid grid-cols-3 gap-3 pt-2">
-          {/* Protein */}
-          <div className="bg-dark-bg/60 border border-dark-border/60 rounded-2xl p-3 flex flex-col justify-between">
-            <div>
-              <span className="text-[10px] font-bold text-dark-textMuted uppercase">Protein</span>
-              <div className="text-lg font-bold text-dark-textLight font-mono mt-0.5">
-                {totals.protein}g
-              </div>
-              <span className="text-[10px] text-dark-textMuted block">Target: {DIET_TARGETS.protein}g</span>
-            </div>
-            <div className="mt-3">
-              <div className="flex justify-between text-[9px] font-mono text-neon font-semibold mb-1">
-                <span>Abs</span>
-                <span>{proteinPct}%</span>
-              </div>
-              <div className="w-full bg-dark-card h-1.5 rounded-full overflow-hidden">
-                <div 
-                  className="bg-neon h-full transition-all duration-500" 
-                  style={{ width: `${proteinPct}%` }}
-                ></div>
-              </div>
-            </div>
-          </div>
+        {/* Quick Add Form */}
+        <form onSubmit={handleAddCalories} className="flex gap-2 pt-2">
+          <input 
+            type="number"
+            placeholder="+ Add Calories..."
+            value={inputCalories}
+            onChange={(e) => setInputCalories(e.target.value)}
+            className="flex-1 bg-dark-bg border border-dark-border rounded-xl px-4 py-3 text-sm text-dark-textLight outline-none focus:border-neon transition-colors"
+          />
+          <button 
+            type="submit"
+            disabled={!inputCalories}
+            className="bg-neon text-dark-bg px-6 rounded-xl font-bold text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#a6ff00] transition-colors"
+          >
+            Add
+          </button>
+        </form>
+      </div>
 
-          {/* Carbs */}
-          <div className="bg-dark-bg/60 border border-dark-border/60 rounded-2xl p-3 flex flex-col justify-between">
-            <div>
-              <span className="text-[10px] font-bold text-dark-textMuted uppercase">Carbs</span>
-              <div className="text-lg font-bold text-dark-textLight font-mono mt-0.5">
-                {totals.carbs}g
+      {/* Supplements Tracker */}
+      <div className="space-y-3">
+        <h3 className="text-sm font-bold text-dark-textLight flex items-center gap-2">
+          <Pill size={16} className="text-neon" />
+          Daily Supplements
+        </h3>
+        <div className="grid grid-cols-2 gap-3">
+          {[
+            { id: 'protein', name: 'Whey Protein', desc: 'Post-workout / Daily' },
+            { id: 'creatine', name: 'Creatine Monohydrate', desc: '5g Daily' },
+            { id: 'd3k2', name: 'Vitamin D3 + K2', desc: 'Immunity & Bones' },
+            { id: 'b12', name: 'Vitamin B12', desc: 'Energy & Nerves' }
+          ].map(supp => (
+            <div 
+              key={supp.id}
+              onClick={() => handleSuppToggle(supp.id)}
+              className={`p-3 border rounded-2xl flex flex-col gap-2 cursor-pointer select-none transition-all ${
+                currentSupps[supp.id]
+                  ? 'bg-neon/5 border-neon/30 shadow-[0_2px_12px_rgba(200,255,0,0.05)]' 
+                  : 'bg-dark-card border-dark-border/80 hover:border-dark-border'
+              }`}
+            >
+              <div className="flex justify-between items-start">
+                <div className={`p-2 rounded-lg border ${
+                  currentSupps[supp.id] ? 'bg-neon/15 text-neon border-neon/25' : 'bg-dark-bg text-dark-textMuted border-dark-border'
+                }`}>
+                  <Activity size={14} />
+                </div>
+                <div className={`w-5 h-5 rounded-full flex items-center justify-center border ${
+                  currentSupps[supp.id] ? 'bg-neon border-neon text-dark-bg' : 'border-dark-border text-transparent'
+                }`}>
+                  <Target size={12} strokeWidth={4} />
+                </div>
               </div>
-              <span className="text-[10px] text-dark-textMuted block">Target: {DIET_TARGETS.carbs}g</span>
-            </div>
-            <div className="mt-3">
-              <div className="flex justify-between text-[9px] font-mono text-neon font-semibold mb-1">
-                <span>Energy</span>
-                <span>{carbsPct}%</span>
-              </div>
-              <div className="w-full bg-dark-card h-1.5 rounded-full overflow-hidden">
-                <div 
-                  className="bg-neon h-full transition-all duration-500" 
-                  style={{ width: `${carbsPct}%` }}
-                ></div>
-              </div>
-            </div>
-          </div>
-
-          {/* Fat */}
-          <div className="bg-dark-bg/60 border border-dark-border/60 rounded-2xl p-3 flex flex-col justify-between">
-            <div>
-              <span className="text-[10px] font-bold text-dark-textMuted uppercase">Fats</span>
-              <div className="text-lg font-bold text-dark-textLight font-mono mt-0.5">
-                {totals.fat}g
-              </div>
-              <span className="text-[10px] text-dark-textMuted block">Target: {DIET_TARGETS.fat}g</span>
-            </div>
-            <div className="mt-3">
-              <div className="flex justify-between text-[9px] font-mono text-neon font-semibold mb-1">
-                <span>Hormones</span>
-                <span>{fatPct}%</span>
-              </div>
-              <div className="w-full bg-dark-card h-1.5 rounded-full overflow-hidden">
-                <div 
-                  className="bg-neon h-full transition-all duration-500" 
-                  style={{ width: `${fatPct}%` }}
-                ></div>
+              <div>
+                <div className="text-xs font-bold text-dark-textLight">{supp.name}</div>
+                <div className="text-[9px] text-dark-textMuted mt-0.5">{supp.desc}</div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
 
@@ -195,7 +198,7 @@ export default function DietTracker({
           <div>
             <span className="text-[10px] text-neon font-mono uppercase tracking-wider block">Hydration Goal</span>
             <h3 className="text-lg font-bold text-dark-textLight font-mono">
-              {(currentLog.water / 1000).toFixed(2)}L <span className="text-xs text-dark-textMuted font-sans font-normal">/ 3.50L Target</span>
+              {((currentLog.water || 0) / 1000).toFixed(2)}L <span className="text-xs text-dark-textMuted font-sans font-normal">/ 3.50L Target</span>
             </h3>
           </div>
         </div>
@@ -225,59 +228,6 @@ export default function DietTracker({
         </div>
       </div>
 
-      {/* Pre-loaded Meal Checklist */}
-      <div className="space-y-3">
-        <h3 className="text-sm font-bold text-dark-textLight flex items-center gap-2">
-          <UtensilsCrossed size={16} className="text-neon" />
-          Vegetarian Shred Menu Logs
-        </h3>
-
-        <div className="space-y-2">
-          {VEGETARIAN_MEALS.map(meal => {
-            const isChecked = !!currentLog.meals[meal.id];
-            return (
-              <div 
-                key={meal.id}
-                onClick={() => handleMealToggle(meal.id)}
-                className={`p-4 border rounded-2xl flex items-center justify-between gap-4 cursor-pointer select-none transition-all ${
-                  isChecked 
-                    ? 'bg-neon/5 border-neon/30 shadow-[0_2px_12px_rgba(200,255,0,0.05)]' 
-                    : 'bg-dark-card border-dark-border/80 hover:border-dark-border'
-                }`}
-              >
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-dark-textLight">{meal.name}</span>
-                    <span className="text-[10px] font-mono font-semibold text-neon bg-neon/10 px-1.5 py-0.5 rounded">
-                      {meal.calories} kcal
-                    </span>
-                  </div>
-                  <p className="text-xs text-dark-textMuted leading-snug">{meal.description}</p>
-                  
-                  {/* Small macros details badge */}
-                  <div className="flex gap-2.5 text-[9px] font-mono text-dark-textMuted font-medium pt-1">
-                    <span>P: <span className="text-dark-textLight font-semibold">{meal.protein}g</span></span>
-                    <span>C: <span className="text-dark-textLight font-semibold">{meal.carbs}g</span></span>
-                    <span>F: <span className="text-dark-textLight font-semibold">{meal.fat}g</span></span>
-                  </div>
-                </div>
-
-                {/* Checkbox button */}
-                <button
-                  type="button"
-                  className={`w-7 h-7 rounded-xl flex items-center justify-center border shrink-0 transition-all ${
-                    isChecked
-                      ? 'bg-neon border-neon text-dark-bg'
-                      : 'border-dark-border text-transparent'
-                  }`}
-                >
-                  <Check size={14} strokeWidth={3} />
-                </button>
-              </div>
-            );
-          })}
-        </div>
-      </div>
     </div>
   );
 }

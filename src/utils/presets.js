@@ -6,58 +6,60 @@ export const WORKOUT_SPLITS = {
   Mon: {
     focus: 'Chest + Triceps',
     exercises: [
-      { id: 'c1', name: 'Flat Barbell Bench Press', sets: 4, reps: '8-10', baseWeight: 60 },
-      { id: 'c2', name: 'Incline Dumbbell Press', sets: 3, reps: '10', baseWeight: 18 },
-      { id: 'c3', name: 'Cable Chest Flyes (Lower Chest Focus)', sets: 3, reps: '12', baseWeight: 15 },
-      { id: 't1', name: 'Overhead Dumbbell Extension', sets: 3, reps: '10', baseWeight: 14 },
-      { id: 't2', name: 'Cable Rope Pushdowns', sets: 3, reps: '12', baseWeight: 20 },
+      { id: 'c1', name: 'Gymleco 321 Seated Wide Chest Press', sets: 4, reps: '8-10', baseWeight: 40 },
+      { id: 'c2', name: 'Gymleco 326 Standing Pec Fly', sets: 3, reps: '12', baseWeight: 15 },
+      { id: 'c3', name: 'Half Rack Incline Barbell Press', sets: 3, reps: '8-10', baseWeight: 40 },
+      { id: 'c4', name: 'Gymleco 215DK Cable Cross (Lower Chest Focus)', sets: 3, reps: '12', baseWeight: 15 },
+      { id: 't1', name: 'Triceps Rope Pushdowns', sets: 3, reps: '12', baseWeight: 20 },
+      { id: 't2', name: 'Single D-Handle Cable Pushdown', sets: 3, reps: '12', baseWeight: 15 },
     ]
   },
   Tue: {
     focus: 'Back + Biceps',
     exercises: [
-      { id: 'b1', name: 'Lat Pulldowns', sets: 4, reps: '10', baseWeight: 45 },
-      { id: 'b2', name: 'Barbell Rows', sets: 3, reps: '8', baseWeight: 40 },
-      { id: 'b3', name: 'Single-Arm Dumbbell Rows', sets: 3, reps: '10', baseWeight: 16 },
-      { id: 'bi1', name: 'Incline Dumbbell Curls', sets: 3, reps: '10', baseWeight: 10 },
-      { id: 'bi2', name: 'Dumbbell Hammer Curls', sets: 3, reps: '12', baseWeight: 12 },
+      { id: 'b1', name: 'Gymleco 116 Incline T-Bar Row', sets: 4, reps: '8-10', baseWeight: 30 },
+      { id: 'b2', name: 'Gymleco 310 Seated Row', sets: 3, reps: '10', baseWeight: 45 },
+      { id: 'b3', name: 'Gymleco 324 Pullover', sets: 3, reps: '12', baseWeight: 30 },
+      { id: 'b4', name: 'Gymleco 010 Back Raise', sets: 3, reps: '15', baseWeight: 0 },
+      { id: 'bi1', name: 'Gymleco 350 Biceps Curl Machine', sets: 3, reps: '10', baseWeight: 20 },
+      { id: 'bi2', name: 'EZ Curl Bar Biceps', sets: 3, reps: '12', baseWeight: 15 },
     ]
   },
   Wed: {
     focus: 'Legs + Core',
     exercises: [
-      { id: 'l1', name: 'Barbell Back Squats', sets: 4, reps: '8', baseWeight: 70 },
-      { id: 'l2', name: 'Romanian Deadlifts (RDL)', sets: 3, reps: '10', baseWeight: 60 },
-      { id: 'l3', name: 'Leg Extensions', sets: 3, reps: '12', baseWeight: 35 },
-      { id: 'a1', name: 'Hanging Knee Raises', sets: 3, reps: '15', baseWeight: 0 },
-      { id: 'a2', name: 'Plank Hold', sets: 3, reps: '60s', baseWeight: 0 },
+      { id: 'l1', name: 'Half Rack Barbell Back Squats', sets: 4, reps: '8', baseWeight: 60 },
+      { id: 'l2', name: 'Gymleco 243 Leg Press 45°', sets: 3, reps: '10', baseWeight: 100 },
+      { id: 'l3', name: 'Gymleco 349 Leg Extension', sets: 3, reps: '12', baseWeight: 35 },
+      { id: 'l4', name: 'Gymleco 342 Lying Leg Curl', sets: 3, reps: '12', baseWeight: 30 },
+      { id: 'a1', name: 'Gymleco 070 Abdominal Bench', sets: 3, reps: '15', baseWeight: 0 },
     ]
   },
   Thu: {
     focus: 'Shoulders + Posture Correction',
     exercises: [
-      { id: 's1', name: 'Seated Barbell Overhead Press', sets: 4, reps: '8', baseWeight: 35 },
-      { id: 's2', name: 'Standing Dumbbell Lateral Raises', sets: 4, reps: '12-15', baseWeight: 8 },
-      { id: 's3', name: 'Cable Face Pulls (Rotator Cuff/Rear Delts)', sets: 4, reps: '15', baseWeight: 17.5 },
-      { id: 's4', name: 'Incline Dumbbell Y-Raises (Lower Traps)', sets: 3, reps: '12', baseWeight: 5 },
-      { id: 's5', name: 'Dumbbell Shrugs (Upper Traps)', sets: 3, reps: '10', baseWeight: 16 },
+      { id: 's1', name: 'Gymleco 330 Shoulder Press', sets: 4, reps: '8-10', baseWeight: 30 },
+      { id: 's2', name: 'Gymleco 334 Standing Side Lateral', sets: 4, reps: '12-15', baseWeight: 15 },
+      { id: 's3', name: 'Gymleco 335 Rear Deltoid', sets: 4, reps: '15', baseWeight: 20 },
+      { id: 's4', name: 'Gymleco 038 Viking Press', sets: 3, reps: '10', baseWeight: 20 },
+      { id: 's5', name: 'Gymleco 356 Forearm Machine', sets: 3, reps: '12', baseWeight: 15 },
     ]
   },
   Fri: {
     focus: 'Full Body + Abs Focus',
     exercises: [
-      { id: 'fb1', name: 'Dumbbell Goblet Squats', sets: 3, reps: '12', baseWeight: 20 },
-      { id: 'fb2', name: 'Dumbbell Floor Bench Press', sets: 3, reps: '10', baseWeight: 18 },
-      { id: 'fb3', name: 'Pull-Ups / Assisted Pull-Ups', sets: 3, reps: 'Max', baseWeight: 0 },
-      { id: 'a3', name: 'Bicycle Crunches', sets: 3, reps: '20', baseWeight: 0 },
-      { id: 'a4', name: 'Russian Twists', sets: 3, reps: '20', baseWeight: 5 },
+      { id: 'fb1', name: 'Gymleco 082 Belt Squat Machine', sets: 3, reps: '10', baseWeight: 40 },
+      { id: 'fb2', name: 'Gymleco 117 Seal Row Bench', sets: 3, reps: '10', baseWeight: 30 },
+      { id: 'fb3', name: 'Gymleco 028 Standing Chest Press', sets: 3, reps: '10', baseWeight: 25 },
+      { id: 'fb4', name: 'Gymleco 360 Gluteus, One Leg Kick', sets: 3, reps: '12', baseWeight: 20 },
+      { id: 'a2', name: 'Gymleco 072 Ab Roll Up', sets: 3, reps: '15', baseWeight: 0 },
     ]
   },
   Sat: {
     focus: 'Cardio & Active Recovery',
     exercises: [
-      { id: 'car1', name: 'Incline Treadmill Walk (12% Incline, 5km/h)', sets: 1, reps: '30 mins', baseWeight: 0 },
-      { id: 'car2', name: 'HIIT Spin Bike (Sprints)', sets: 1, reps: '15 mins', baseWeight: 0 },
+      { id: 'car1', name: 'Stairmaster (Steady State)', sets: 1, reps: '30 mins', baseWeight: 0 },
+      { id: 'car2', name: 'Jogging Machine (Intervals)', sets: 1, reps: '15 mins', baseWeight: 0 },
     ]
   },
   Sun: {
@@ -67,17 +69,6 @@ export const WORKOUT_SPLITS = {
     ]
   }
 };
-
-export const VEGETARIAN_MEALS = [
-  { id: 'breakfast', name: 'Breakfast (8:00 AM)', description: '3 Boiled Eggs + 2 slices Whole Wheat Toast + Coffee', protein: 22, carbs: 26, fat: 15, calories: 330 },
-  { id: 'mid_morning', name: 'Mid-Morning (11:00 AM)', description: '1 scoop Whey Protein + 1 Banana + 15g Almonds', protein: 30, carbs: 32, fat: 9, calories: 330 },
-  { id: 'lunch', name: 'Lunch (1:30 PM)', description: 'Paneer Bhurji (100g paneer) + 1 cup Yellow Dal + 1 Chapati + Green Salad', protein: 32, carbs: 45, fat: 22, calories: 510 },
-  { id: 'pre_workout', name: 'Pre-Workout (4:30 PM)', description: 'Black Coffee + 2 Rice Cakes + 1 tbsp Peanut Butter', protein: 5, carbs: 20, fat: 8, calories: 170 },
-  { id: 'post_workout', name: 'Post-Workout (6:30 PM)', description: '1.5 scoop Whey Protein + Water', protein: 36, carbs: 3, fat: 2, calories: 170 },
-  { id: 'snack', name: 'Evening Snack (7:30 PM)', description: '30g Roasted Chana (Chickpeas)', protein: 6, carbs: 18, fat: 2, calories: 110 },
-  { id: 'dinner', name: 'Dinner (9:00 PM)', description: 'Tofu Stir-fry (100g tofu) + Rajma (1/2 cup) + 1/2 cup Brown Rice + Broccoli', protein: 20, carbs: 45, fat: 8, calories: 330 },
-  { id: 'before_bed', name: 'Before Bed (10:30 PM)', description: '150ml Low-fat Milk or Casein Protein Shake', protein: 10, carbs: 7, fat: 2, calories: 86 }
-];
 
 export const DIET_TARGETS = {
   calories: 2050,
@@ -131,12 +122,12 @@ export const WEEK_SPECIFIC_ADVICE = [
   {
     weeks: 'Weeks 1–4',
     phase: 'Form Focus & Habit Building',
-    advice: 'Priority is mind-muscle connection. Master the form on bench press, squats, and rows. Ensure you log every workout. Do not rush to lift heavy yet. Build the habit of wearing your posture belt and tracking food.'
+    advice: 'Priority is mind-muscle connection. Master the form on your new Gymleco machines and free weights. Ensure you log every workout. Do not rush to lift heavy yet. Build the habit of tracking your calories.'
   },
   {
     weeks: 'Weeks 5–8',
     phase: 'Progressive Overload Phase',
-    advice: 'Now that form is locked, push for progressive overload. Attempt to add +2.5kg to your compound lifts weekly or increase reps. Keep your protein high (145g) to recover and repair.'
+    advice: 'Now that form is locked, push for progressive overload. Attempt to add weight on the machines weekly or increase reps. Keep your protein high (145g) to recover and repair.'
   },
   {
     weeks: 'Weeks 9–12',

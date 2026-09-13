@@ -73,6 +73,12 @@ export default function App() {
 
   // 3. Custom Workout Splits state (to allow manual reorganization of days)
   const [customSplits, setCustomSplits] = useState(() => {
+    // FORCE UPDATE: Clear old splits to sync with Gymleco equipment overhaul
+    const isOverhauled = localStorage.getItem('fit_v2_equipment_sync');
+    if (!isOverhauled) {
+      localStorage.setItem('fit_v2_equipment_sync', 'true');
+      return WORKOUT_SPLITS;
+    }
     const saved = localStorage.getItem('fit_workoutSplits');
     return saved ? JSON.parse(saved) : WORKOUT_SPLITS;
   });

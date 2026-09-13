@@ -8,11 +8,11 @@ export function getLocalDateString(date = new Date()) {
   return `${year}-${month}-${day}`;
 }
 
-// Parses a YYYY-MM-DD string into a Date object representing local midnight on that day
+// Parses a YYYY-MM-DD string into a Date object representing local NOON on that day
 export function parseLocalDate(dateStr) {
   if (!dateStr) return new Date();
   const [year, month, day] = dateStr.split('-').map(Number);
-  return new Date(year, month - 1, day);
+  return new Date(year, month - 1, day, 12, 0, 0, 0);
 }
 
 // Gets the 3-letter weekday name ('Sun', 'Mon', etc.) for a YYYY-MM-DD local date string
